@@ -5,11 +5,14 @@ inputs:
     description: "NPM token with access to the private packages you want to use"
     required: true
 runs:
+  using: "composite"
   steps:
     - name: Creating .npmrc
+      shell: bash
       run: |
         cat << EOF > "$HOME/.npmrc"
           //registry.npmjs.org/:_authToken=$NPM_TOKEN
         EOF
+        echo "Created .npmrc"
       env:
         NPM_TOKEN: ${{ inputs.token }}

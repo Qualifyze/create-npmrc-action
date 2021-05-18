@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test local action
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: add-action-metadata-file
+      - id: npmrc
+        name: Use local action to test it
+        uses: Qualifyze/create-npmrc-action@add-action-metadata-file
+        with:
+          token: "notreallyatoken"
