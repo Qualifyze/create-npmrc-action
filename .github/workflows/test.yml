@@ -7,9 +7,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: add-action-metadata-file
-      - id: npmrc
-        name: Use local action to test it
-        uses: Qualifyze/create-npmrc-action@add-action-metadata-file
+          fetch-depth: 2
+      - name: Use local action to create .npmrc
+        uses: ./create
         with:
           token: "notreallyatoken"
+      - name: Make sure it contains the token
+        shell: bash
+        run: |
+          cd ~
+          grep -o "notreallyatoken" .npmrc | wc -l
+      - name: Use local action to remove .npmrc
+        uses: ./remove
+      - name: Make sure the token is removed
+        shell: bash
+        run: |
+          cd ~
+          ! grep -o "notreallyatoken" .npmrc | wc -l
