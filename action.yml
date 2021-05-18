@@ -1,0 +1,15 @@
+name: "Create .npmrc"
+description: "Creates an .npmrc file that enables usage of private NPM packages."
+inputs:
+  token:
+    description: "NPM token with access to the private packages you want to use"
+    required: true
+runs:
+  steps:
+    - name: Creating .npmrc
+      run: |
+        cat << EOF > "$HOME/.npmrc"
+          //registry.npmjs.org/:_authToken=$NPM_TOKEN
+        EOF
+      env:
+        NPM_TOKEN: ${{ inputs.token }}
