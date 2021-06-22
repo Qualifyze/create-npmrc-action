@@ -1,0 +1,10 @@
+name: "Remove .npmrc"
+description: "Removes an .npmrc file to prevent leaking any tokens."
+runs:
+  using: "composite"
+  steps:
+    - name: Removing .npmrc
+      shell: bash
+      run: |
+        rm -- "$HOME"/.npmrc
+        echo "Removed .npmrc"
