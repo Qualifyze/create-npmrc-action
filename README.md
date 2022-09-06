@@ -1,28 +1,29 @@
 # create-npmrc-action
 
-GitHub Action that creates an .npmrc file. Useful if you need access to private NPM packages.
-This repository provides two actions:
+## Deprecated
 
-1. `create`: Create an `.npmrc` file with the passed access token. This is required before installing private NPM packages.
-2. `remove`: Remove the file created by the above action to make the access token is not leaked in subsequent workflow steps.
-
-## Example usage:
+Instead, please use `registry-url` parameter of the standard GitHub action `setup-node`:
 
 ```yml
-on: [push]
+on: push
 
 jobs:
   install:
     runs-on: ubuntu-latest
     name: Install dependencies
     steps:
-      - uses: actions/checkout@v2
-      - name: Create .npmrc
-        uses: Qualifyze/create-npmrc-action/create@main
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          token: ${{ secrets.NPM_TOKEN }}
+          node-version: 16.16.0
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
       - name: Install private NPM packages
         run: npm ci
-      - name: Remove .npmrc
-        uses: Qualifyze/create-npmrc-action/remove@main
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
